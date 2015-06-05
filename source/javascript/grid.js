@@ -29,6 +29,7 @@
 		noMoreText:"no more",
 		loadErrorText:"load error,click to retry"
 	};
+	
 	//INIT 
 	Grid.prototype.init = function(){
 		if(this.options.url == undefined || this.options.url == null){
@@ -121,8 +122,11 @@
 		this.loadData();
 	}
 	//search  ==the tbody element should be empty at first
-	Grid.prototype.search = function(){
+	Grid.prototype.search = function(args){
 		this.empty();
+		if(type args == 'object'){
+			this.options.params = args;
+		}
 		this.options.page = 1;
 		this.loadData();
 	}
@@ -152,7 +156,10 @@
 	}
 	// GRID PLUGIN DEFINATION
 	// ======================
-	function Plugin(options){
+	function Plugin(options,args){
+		if(typeof options == 'string'){
+			return $.fn.grid.methods[options](this,args);		
+		}
 		return this.each(function(){
 			var $this = $(this);
 			var data = $this.data('pengb.grid');
@@ -161,10 +168,16 @@
 				data = new Grid(this,options);
 				$this.data('pengb.grid',data);
 			}
-			if(typeof options == 'string'){
-				data[options]();
-			}
+
 		});
+	}
+	Plugin.methods = {
+		getOptions:function(element){
+			return $(element).data('pengb.grid').getOptions();
+		},
+		search : function(element,args){
+			$(element).data('pengb.grid').search(args);
+		}
 	}
 
 	var old = $.fn.grid;
