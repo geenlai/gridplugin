@@ -1,0 +1,25 @@
+/*==============================================
+ *
+ *
+ ***********************************************/
+.grid-info{
+	text-align: center;
+}
+.grid-info-status{
+	width:100px;
+	background:#ccc;
+	text-align:center;
+}
+.grid-info-loadmore{
+	cursor:pointer;
+	width:100px;
+	background:#ccc;
+	text-align:center;
+}
+.grid-info-loaderror{
+	color: red;
+	cursor:pointer;
+	width:100px;
+	background:#ccc;
+	text-align:center;
+}

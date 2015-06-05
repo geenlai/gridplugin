@@ -21,33 +21,60 @@
 		pageSize:10,
 		params:null,
 		width:'98%',
+		baseWidth:0,
 		height:'auto',
-		loadingText:'loading'
+		loadingText:'loading',
+		nodataText:'no data',
+		loadMoreText:'load more',
+		noMoreText:"no more",
+		loadErrorText:"load error,click to retry"
 	};
 	//INIT 
 	Grid.prototype.init = function(){
 		if(this.options.url == undefined || this.options.url == null){
 			return ;
 		}
-		if(this.options.columns == undefined || this.options.columns == null 
-			|| Object.prototype.toString.call(this.options.columns) !== "[object Array]"){
+		var options = this.options;
+		//check column params
+		if(options.columns == undefined || options.columns == null 
+			|| Object.prototype.toString.call(options.columns) !== "[object Array]"){
 			console.log('columns undefined');
 			return ;
+		}else{
+			$.each(options.columns,function(i,column){
+				//width  defualts = 50px
+				if(!/\d+$/.test(column.width)){
+					column.width = 50;
+				}else{
+					column.width = parseInt(column.width);
+				}
+				options.baseWidth += column.width;
+
+			});
 		}
-		//header
+		this.element.empty();
+		var elementId = this.element.attr("id");
+		this.element.html('<table width="'+this.options.width+'" height="'+this.options.height+'"><thead></thead><tbody></tbody></table>');
+		//header set <th> width by percentage
 		var theadHtml = '<tr>'
+		var tableWidth = this.element.find('table').width();
 		for(var i = 0; i < this.options.columns.length; i ++){
-			theadHtml += '<th>' + this.options.columns[i].title + '</th>'
+			var align = (this.options.columns[i].align == undefined || this.options.columns[i].align == null) ? 'left' : this.options.columns[i].align;
+			var width = tableWidth * this.options.columns[i].width / this.options.baseWidth;
+			theadHtml += '<th><div style="text-align:' +align+ ';width:'+width+'px">' + this.options.columns[i].title + '<div></th>'
 		}
 		theadHtml += '</tr>'
-		this.element.html('<table><thead>' +theadHtml+ '</thead><tbody></tbody></table>');
-		this.element.append('<div class="grid-status" style="cursor:pointer;width:100px;background:#ccc">' +this.options.loadingText+ '</div>');
+		this.element.find('thead').html(theadHtml);
+		this.element.append('<div class="grid-info" style="width:'+this.options.width+'" grid-belongs="' +elementId+ '"><a class="grid-info-status">' +this.options.loadingText+ '</a></div>');
 		this.loadData();
 	}
 	//loadData
 	Grid.prototype.loadData = function(){
 		var $element = this.element;
 		var options = this.options;
+
+		//loading .....
+		$element.find('.grid-info').empty().html('<a class="grid-info-status">' +options.loadingText+ '</a>');
 		$.ajax({
 			url : options.url,
 			data: {
@@ -68,46 +95,20 @@
 					}
 					tbodyHtml += '</tr>';
 				}
-				this.element.find('tbody').append(tbodyHtml);
-				if(data.nextpage  < totalpage){
-					$element.find('.grid-status').empty().html('loadmore');
-				}else{
-					$element.find('.grid-status').empty().html('no more');
-				}
-			},
-			error:function(){
-				console.log("something wrong...");
-				var data = {
-					nextpage : 2,
-					totalpage: 4,
-					rows:[
-						{
-							name:"pengbo",email:"pengbowo@126.com"
-						},
-						{
-							name:"pengbo1",email:"pengbowo@126.com1"
-						},
-						{
-							name:"pengbo2",email:"pengbowo@126.com12"
-						}
-					]
-				}
-				var rows = data.rows;
-				var tbodyHtml = '';
-				for(var i = 0; i < rows.length; i ++){
-					tbodyHtml += '<tr>';
-					for(var j = 0; j < options.columns.length; j ++){
-						tbodyHtml += '<td>' + getCellHtml(rows[i],options.columns[j]) + '</td>';
-					}
-					tbodyHtml += '</tr>';
-				}
 				$element.find('tbody').append(tbodyHtml);
 				if(data.nextpage  < data.totalpage){
-					options.page = options.page + 1;
-					$element.find('.grid-status').empty().html('loadmore');
+					$element.find('.grid-info').empty().html('<a class="grid-info-loadmore">' +options.loadMoreText+ '</a>');
 				}else{
-					$element.find('.grid-status').empty().html('no more');
+					$element.find('.grid-info').empty().html('<a class="grid-info-status">' +options.noMoreText+ '</a>');
 				}
+				options.page += 1;
+			},
+			error:function(XMLHttpRequest, textStatus, errorThrown){
+				console.log(XMLHttpRequest.status);
+				console.log(XMLHttpRequest.readyState);
+				console.log(textStatus);
+				console.log(errorThrown.message);
+				$element.find('.grid-info').empty().html('<a class="grid-info-loaderror">' +options.loadErrorText+ '</a>');
 			}
 		});
 	}
@@ -117,7 +118,7 @@
 	}
 	//load more
 	Grid.prototype.loadMore = function(){
-		console.log("load more .................");
+		this.loadData();
 	}
 	//search  ==the tbody element should be empty at first
 	Grid.prototype.search = function(){
@@ -137,19 +138,16 @@
 		}else if(typeof column['formatter'] == 'function'){
 			innerHtml = column['formatter'](row[column.field],row);
 		}else {
-			innerHtml = row[column.field];
+			innerHtml = row[column.field] == undefined ? '' : row[column.field];
 		}
 
 		var outerHtml = '';
 		var width = 50;
 		var align = 'left';
-		if(column.width != undefined && /^\d+$/.test(column.width)){
-			width = column.width;
-		}
 		if(column.align != undefined){
 			align = column.align;
 		}
-		outerHtml = '<div style="width:'+width+'px;text-align:' + align + '">'+innerHtml+'</div>';
+		outerHtml = '<div style="text-align:' + align + '">'+innerHtml+'</div>';
 		return outerHtml;
 	}
 	// GRID PLUGIN DEFINATION
@@ -181,9 +179,9 @@
 		return this;
 	}
 	// Grid DATA-API
-	$(document).on('click','.grid-status',function(e){
+	$(document).on('click','.grid-info-loadmore,.grid-info-loaderror',function(e){
 		var $this = $(this);
-		var $parent = $this.parent();
+		var $parent = $this.parent().parent();
 		$parent.grid("loadMore");
 	});
 
