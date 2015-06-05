@@ -124,7 +124,7 @@
 	//search  ==the tbody element should be empty at first
 	Grid.prototype.search = function(args){
 		this.empty();
-		if(type args == 'object'){
+		if(typeof args == 'object'){
 			this.options.params = args;
 		}
 		this.options.page = 1;
