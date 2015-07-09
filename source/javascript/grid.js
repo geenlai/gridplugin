@@ -158,11 +158,35 @@
 	// ======================
 	function Plugin(options,args){
 		if(typeof options == 'string'){
-			return $.fn.grid.methods[options](this,args);		
+			var data = this.data('pengb.grid');
+			if(typeof options == "string"){
+				if(!data){
+					return ;
+				}else{
+					if(options == "getOptions"){
+						return data.getOptions(args);
+					}
+					if (options == "search") {
+						return data.getOptions(args);
+					};
+				}
+			}
 		}
 		return this.each(function(){
 			var $this = $(this);
 			var data = $this.data('pengb.grid');
+			if(typeof options == "string"){
+				if(!data){
+					return ;
+				}else{
+					if(options == "getOptions"){
+						data.getOptions(args);
+					}
+					if (options == "search") {
+						data.getOptions(args);
+					};
+				}
+			}
 
 			if(!data){
 				data = new Grid(this,options);
@@ -171,15 +195,7 @@
 
 		});
 	}
-	Plugin.methods = {
-		getOptions:function(element){
-			return $(element).data('pengb.grid').getOptions();
-		},
-		search : function(element,args){
-			$(element).data('pengb.grid').search(args);
-		}
-	}
-
+	//old
 	var old = $.fn.grid;
 
 	$.fn.grid             = Plugin;
