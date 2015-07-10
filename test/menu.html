@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>AWS PAL 流程资产库 - 让流程管理更简单 </title>
+    <meta name="keywords" content="AWS PAL,流程管理,云端流程管理服务">
+    <meta name="description" content="AWS PAL让流程管理更简单，伴随企业长久发展,即刻开启您的云端流程管理服务。AWS PAL标准的流程架构，简化的流程模型，设计流程更简单。按权限推送流程文件，自动记录版本信息，发布流程更简单。丰富的报告模板，一键生成流程手册，优化流程更简单。">
+    <script type="text/javascript" src="../source/javascript/jquery1.10.2.js"></script>
+    <script type="text/javascript" src="../source/javascript/menu.js"></script>
+    <link rel="stylesheet" type="text/css" href="../source/css/menu.css"></head>
+<body>
+<div id="grid">
+    <div class="dot" id = "1" style="width:20px;heigth:20px;position:relative;background:#567">d</div>
+
+    <h1>ssssss</h1>
+     <div class="dot" id="2" style="width:20px;heigth:20px;position:relative;background:#567">d</div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $.fn.menu('.dot',[{
+                name:'修改',
+                fn : 'modify'
+            },{
+                name:"回滚",
+                fn:'rollback'
+            },{
+                name:"删除",
+                fn:'del'
+            }]);
+    });
+    function modify(id){
+        console.log("modify clicked");
+        $(".menu").hide();
+    }
+    function rollback(id){
+        console.log("rollback clicked");
+         $(".menu").hide();
+    }
+    function del(id){
+        console.log("delete clicked");
+        $(".menu").hide();
+    }
+</script>
+<div class="menu" style="position:absolute;border:2px solid #ccc;z-index:10;display:none"><ul class="menu-list"></ul></div>
+</body>
+</html>

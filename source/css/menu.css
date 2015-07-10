@@ -1,0 +1,12 @@
+/*==============================================
+ *
+ *
+ ***********************************************/
+.menu-item{
+	border-top: 1px solid #CCC;
+	border-bottom: 1px solid #CCC;
+	cursor: pointer;
+}
+.menu-item:hover{
+	background-color: #785;
+}
