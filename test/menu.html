@@ -19,26 +19,23 @@
     $(document).ready(function(){
         $.fn.menu('.dot',[{
                 name:'修改',
-                fn : 'modify'
+                fn : modify
             },{
                 name:"回滚",
-                fn:'rollback'
+                fn:rollback
             },{
                 name:"删除",
-                fn:'del'
+                fn:del
             }]);
     });
     function modify(id){
         console.log("modify clicked");
-        $(".menu").hide();
     }
     function rollback(id){
         console.log("rollback clicked");
-         $(".menu").hide();
     }
     function del(id){
         console.log("delete clicked");
-        $(".menu").hide();
     }
 </script>
 <div class="menu" style="position:absolute;border:2px solid #ccc;z-index:10;display:none"><ul class="menu-list"></ul></div>

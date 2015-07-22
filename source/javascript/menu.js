@@ -33,8 +33,8 @@
 				//构造菜单
 				$('.menu-list').empty();
 				for(var i = 0; i< options.length; i ++){
-					var menuItem = '<li class="menu-item" onmousedown="'+options[i].fn+'(\''+id+'\')">'+options[i].name+'</li>';
-					$('.menu-list').append(menuItem);
+					var menuItem = '<li class="menu-item">'+options[i].name+'</li>';
+					$(menuItem).on("mousedown",document,options[i].fn).appendTo('.menu-list');
 				}
 				e.stopPropagation();
 			}
