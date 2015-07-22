@@ -25,17 +25,21 @@
                 fn:rollback
             },{
                 name:"删除",
+                disabled:true,
                 fn:del
             }]);
     });
-    function modify(id){
-        console.log("modify clicked");
+    function modify(item,elem){
+        var id = elem.attr("id");
+        console.log(id+"modify clicked");
     }
-    function rollback(id){
-        console.log("rollback clicked");
+    function rollback(item,elem){
+        var id = elem.attr("id");
+        console.log(id+"rollback clicked");
     }
-    function del(id){
-        console.log("delete clicked");
+    function del(item,elem){
+        var id = elem.attr("id");
+        console.log(id+"delete clicked");
     }
 </script>
 <div class="menu" style="position:absolute;border:2px solid #ccc;z-index:10;display:none"><ul class="menu-list"></ul></div>

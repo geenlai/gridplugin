@@ -20,10 +20,12 @@
   		$('.menu').off('mousedown').on('mousedown',function(e){
   			e.stopPropagation();
   		});
+  		$('.menu').off('mouseleave').on('mouseleave',function(e){
+  			$('.menu').hide();
+  		});
 		$(document).on('mousedown',selector,function(e){
 			var $this = $(this);
 			//点击事件参数
-			var id = $this.attr('id');
 			if(e.which == 3){
 				//计算显示位置
 				var x = e.clientX + $(this).scrollLeft();
@@ -33,9 +35,18 @@
 				//构造菜单
 				$('.menu-list').empty();
 				for(var i = 0; i< options.length; i ++){
-					var menuItem = '<li class="menu-item">'+options[i].name+'</li>';
-					$(menuItem).on("mousedown",document,options[i].fn).appendTo('.menu-list');
+					var disabled = "";
+					if(options[i].disabled){
+						disabled="disabled";
+					}
+					var menuItem = '<li class="menu-item '+disabled+'">'+options[i].name+'</li>';
+					$(menuItem).data({"fn":options[i].fn}).appendTo('.menu-list');
 				}
+				$(".menu-item").on("mousedown",function(event){
+						if($(this).hasClass("disabled"))return ;
+						var fn = $(this).data("fn");
+						fn.call(window,$(this),$this);
+				})
 				e.stopPropagation();
 			}
 		});
