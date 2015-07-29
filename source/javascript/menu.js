@@ -9,21 +9,17 @@
 	// MENU PLUGIN DEFINATION
 	// ======================
 	function Plugin(selector,options){
-		//set right click disable
-		$(document).on('contextmenu',this,function(e){
-			return false; 
-		});
-		$(document).off('mousedown').on('mousedown', function(){
+		$(document).off('contextmenu').on('contextmenu',selector+",.menu",function(e){
+            return false;
+        });
+  		$(document).off('mousedown').on('mousedown', function(){
 		   	$('.menu').hide();
-  		});
+	  	});
 
-  		$('.menu').off('mousedown').on('mousedown',function(e){
-  			e.stopPropagation();
-  		});
-  		$('.menu').off('mouseleave').on('mouseleave',function(e){
-  			$('.menu').hide();
-  		});
-		$(document).on('mousedown',selector,function(e){
+	  	$('.menu').off('mousedown').on('mousedown',function(e){
+	  		e.stopPropagation();
+	  	});
+		$(selector).on('mousedown',function(e){
 			var $this = $(this);
 			//点击事件参数
 			if(e.which == 3){
@@ -42,11 +38,11 @@
 					var menuItem = '<li class="menu-item '+disabled+'">'+options[i].name+'</li>';
 					$(menuItem).data({"fn":options[i].fn}).appendTo('.menu-list');
 				}
-				$(".menu-item").on("mousedown",function(event){
+				$(".menu-item").on("click",function(event){
 						if($(this).hasClass("disabled"))return ;
 						var fn = $(this).data("fn");
 						fn.call(window,$(this),$this);
-				})
+				});
 				e.stopPropagation();
 			}
 		});
