@@ -179,12 +179,11 @@
 				if(!data){
 					return ;
 				}else{
-					if(options == "getOptions"){
-						data.getOptions(args);
+					if(typeof data['options'] == 'function'){
+						data['options'](args);
+					}else{
+						//no this function
 					}
-					if (options == "search") {
-						data.getOptions(args);
-					};
 				}
 			}
 
