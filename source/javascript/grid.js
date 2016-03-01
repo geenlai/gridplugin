@@ -157,21 +157,6 @@
 	// GRID PLUGIN DEFINATION
 	// ======================
 	function Plugin(options,args){
-		if(typeof options == 'string'){
-			var data = this.data('pengb.grid');
-			if(typeof options == "string"){
-				if(!data){
-					return ;
-				}else{
-					if(options == "getOptions"){
-						return data.getOptions(args);
-					}
-					if (options == "search") {
-						return data.getOptions(args);
-					};
-				}
-			}
-		}
 		return this.each(function(){
 			var $this = $(this);
 			var data = $this.data('pengb.grid');
